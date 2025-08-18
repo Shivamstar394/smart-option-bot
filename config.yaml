@@ -1,0 +1,49 @@
+market:
+  symbol: "NIFTY"
+  lot_size: 50                 # NIFTY options lot size
+  instrument_type: "index"
+  exchange: "NSE"
+  timezone: "Asia/Kolkata"
+
+data:
+  source: "csv"                # csv | live
+  csv_path: "data/underlying.csv"
+  timeframe: "5min"            # good balance for NIFTY scalp/swing intraday
+  iv_column: "iv"              # optional
+
+strategy:
+  name: "simple_strategy"
+  ema_fast: 20
+  ema_slow: 50
+  rsi_period: 14
+  rsi_long: 55                 # long when RSI crosses above 55 with bullish bias
+  rsi_short: 45                # short when RSI crosses below 45 with bearish bias
+  atr_period: 14
+  ivp_threshold_buy: 60        # buy options only when IVP < 60
+
+options:
+  buy_delta_target: 0.35       # ~3–4% OTM; suits NIFTY liquidity
+  hedge_delta_target: 0.15
+  expiry_preference: "nearest" # weekly NIFTY expiry
+  min_dte: 1
+  max_dte: 15
+  slippage_bps: 5
+
+risk:
+  capital: 100000              # example; change to your paper/live capital
+  risk_per_trade: 0.01         # risk ~1% per trade
+  option_stop_loss_pct: 0.25   # 25% premium SL
+  option_take_profit_pct: 0.4  # 40% premium TP
+  trail_trigger_pct: 0.25      # start trailing after +25%
+  trail_step_pct: 0.1          # trail in 10% steps
+
+alerts:
+  console: true
+  telegram:
+    enabled: true
+    bot_token: "7689383215:AAFSDiY05E3FCDreFIimMAivV59yIJK51bs"
+    chat_id: "5119093654"
+
+backtest:
+  transaction_cost_bps: 2
+  slippage_bps: 5
